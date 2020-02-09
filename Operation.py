@@ -5,8 +5,11 @@ class Operation(UserInput, BankingBasic ):
     def __init__(self):
         BankingBasic.__init__(self)
         self.Eloquent = AppEloquent()
+        # for x in self.Eloquent.statement('id', 1):
+        #     print(x)
         # print(self.Eloquent.configuration)
         self.name = 'ade'
+        self.user = ''
         self.defaultAmount = (1000,2000,5000,10000,20000,50000,100000,'Other')
         self.displayAmount = ("#1,000","#2,000","#5,000","#10,000","#20,000","#50,000","#100,000",'Other')
         
@@ -18,16 +21,24 @@ class Operation(UserInput, BankingBasic ):
             return password
             # 
         else:
-            return self.handleError(self.enterPassword,)
+            return self.handleError(self.enterPassword, self.logUserIn)
             
-    def enterName(self, namer):
-        print(f"\33[32m Please enter your {namer} \33[0m ")    
-        firstName = self.validate(namer)
+    def enterFirstName(self):
+        print(f"\33[32m Please enter your fisrtname \33[0m ")    
+        firstName = self.validate('firstName')
         if firstName:
             return firstName
             # 
         else:
-            return self.handleError(self.enterName(namer), self.enterName(namer))
+            return self.handleError(self.enterFirstName, self.logUserIn)
+    def enterLastName(self):
+        print(f"\33[32m Please enter your lastname\33[0m ")    
+        lastName = self.validate('lastName')
+        if lastName:
+            return lastName
+            # 
+        else:
+            return self.handleError(self.enterLastName, self.logUserIn)
         
     def enterAccountType(self):
         print("\33[32m Please enter your desired account type \33[0m ")
@@ -36,7 +47,7 @@ class Operation(UserInput, BankingBasic ):
         if accType:
             return accType
         else:
-            return self.handleError(self.enterAccountType,)
+            return self.handleError(self.enterAccountType, self.logUserIn)
             
     def displayWelcome(self):
         print(" \33[32m YOU WELCOME TO BEYOND'S ATM APP \33[0m ")
@@ -48,8 +59,10 @@ class Operation(UserInput, BankingBasic ):
             else:
                 if route =="1":
                     self.logUserIn()
+                    return
                 else:
-                    pass
+                    self.signUserUp()
+                    return
         else:
             print("\33[31m Invalid value was entered \33[0m")
             return self.handleError(self.displayWelcome)
@@ -59,36 +72,49 @@ class Operation(UserInput, BankingBasic ):
         password = self.enterPassword()
         print(f"password is {password}")
         
-        firstName = self.enterName('firstName')
+        firstName = self.enterFirstName()
         print(f"firstName is {firstName}")
          
         if password and firstName:
-            self.login((firstName, password))
-            
+            user = self.login((firstName, password))
+            if user:
+               self.user = user[0]
+               print(self.user)
+               self.intro()
+               return
+            else:
+                print("\33[33m Invalid login credentials, no account is found")
+                return self.displayWelcome()
+                return
         else:
             print('\33[31m Sorry, unable to process your details, please try again \33[0m')
-            return self.handleError(self.logUserIn,)
+            return self.handleError(self.logUserIn, self.displayWelcome)
         
     def signUserUp(self):
         print("You are about to Register an Account with us \n")
-        password = self.enterPassword(recurse)
+        password = self.enterPassword()
         print(f"password is {password}")
         
-        firstName = self.enterName('firstName')
+        firstName = self.enterFirstName()
         print(f"firstName is {firstName}")
         
-        lastName =  self.enterName('lastName')
+        lastName =  self.enterLastName()
         print(f"lastName is {lastName}")
         
-        accType = self.enterAccountType(recurse)
+        accType = self.enterAccountType()
         print(f"account type is {accType}")
             
         if password and firstName and lastName and accType:
-            GO = {'password':password, "firstName": firstName, "lastName": lastName, "type": accType}
-            return GO
+            
+            user = self.registerCustomer( (firstName, lastName, password), accType)
+            if user:
+                self.user = self.Eloquent.firstUser('id', user)
+                print(self.user)
+                self.intro()
+                return
         else:
             print('\33[31m Sorry, unable to process your provided details, please try again \33[0m')
-            return self.handleError(self.signUserUp,)
+            return self.handleError(self.signUserUp,  self.displayWelcome )
     
                 
             

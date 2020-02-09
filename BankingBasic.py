@@ -126,6 +126,7 @@ class BankingBasic:
             cursor.execute("INSERT INTO `accounts` (`type`, `customer`, `accountNumber` ) VALUES (%s, %s, %s) ", (2, customerId, accNum ))
             self.tabs.commit()
             print(f"\n \33[4m\33[32m Welcome {data[0]}! You have successfully registered and your account number is {accNum} \33[0m \n")
+            return customerId
         except DB.Error as err:
             print(f"\n \33[31m There is error and the error is: \n {err} \33[0m \n")
             self.tabs.rollback()
@@ -140,7 +141,7 @@ class BankingBasic:
     def login(self, data):
         try:
             cursor = self.tabs.cursor()
-            cursor.execute("SELECT * FROM `customers` WHERE `firstName` = %s AND `password` = %s ", (data))
+            cursor.execute("SELECT * FROM `customers` WHERE `firstName` = %s AND `password` = %s  LIMIT 1", (data))
             allRecords =cursor.fetchall()
             print(f'\n\33[34m all is \n {allRecords} \33[0m\n')
             return allRecords
@@ -152,12 +153,12 @@ class BankingBasic:
             #closing database connection.
             if(self.tabs.is_connected()):
                 cursor.close()
-                self.tabs.close()
+                # self.tabs.close()
                 print("\n\33[33m connection is closed \33[0m\n")
 
 mockCustomer = ('beyond', 'Beyond', '12345678')
 uses = ('beyond', '12345678')
-# BankingBasic().registerCustomer( mockCustomer, 2)
+# BankingBasic().registerCustomer( mockCustomer,2)
 # BankingBasic().postTransaction((1,0, "Deposit", "Creditted by 5000 ", 5000))
 # BankingBasic().login(uses)
 # BankingBasic().login(None)
