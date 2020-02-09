@@ -143,6 +143,7 @@ class BankingBasic:
             cursor.execute("SELECT * FROM `customers` WHERE `firstName` = %s AND `password` = %s ", (data))
             allRecords =cursor.fetchall()
             print(f'\n\33[34m all is \n {allRecords} \33[0m\n')
+            return allRecords
         except DB.Error as err:
             print(f"There is error and the error is \n {err}")
             self.tabs.rollback()
