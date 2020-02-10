@@ -7,9 +7,9 @@ class AppEloquent():
         self.customer = self.db.table('customers')
         self.account = self.db.table('accounts')
         self.transaction = self.db.table('transactions')
-        self.firstUser('id', 6)
-        self.firstAccount('type', 2)
-        self.statement('id', 1)
+        # # print(self.firstUser('id', 23))
+        # print(self.firstAccount('type', 2))
+        # print(self.statement('customer', 1))
 
     def firstUser(self, identifier, data):
         return self.customer.where(identifier, data).first()
@@ -22,6 +22,7 @@ class AppEloquent():
         # collector = ()
         # # print(collector, type(collector))
         # for x in allTransaction:
+        #     print(x)
             
 AppEloquent()
     

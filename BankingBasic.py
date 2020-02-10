@@ -100,12 +100,13 @@ class BankingBasic:
         except DB.Error as err:
             print(f"There is error and the error is \n {err}")
         finally:
+            pass
             
             #closing database connection.
-            if(self.tabs.is_connected()):
-                cursor.close()
-                self.tabs.close()
-                print("\33[33m connection is closed \33[0m")
+            # if(self.tabs.is_connected()):
+            #     cursor.close()
+            #     self.tabs.close()
+            #     print("\33[33m connection is closed \33[0m")
 
     def registerCustomer(self, data, typy):
         try:
@@ -131,12 +132,13 @@ class BankingBasic:
             print(f"\n \33[31m There is error and the error is: \n {err} \33[0m \n")
             self.tabs.rollback()
         finally:
+            pass
             
             #closing database connection.
-            if(self.tabs.is_connected()):
-                cursor.close()
-                self.tabs.close()
-                print("\33[33m connection is closed \33[0m")
+            # if(self.tabs.is_connected()):
+            #     cursor.close()
+            #     self.tabs.close()
+            #     print("\33[33m connection is closed \33[0m")
                 
     def login(self, data):
         try:
